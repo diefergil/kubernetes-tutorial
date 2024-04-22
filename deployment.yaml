@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: k8s-web-hello
+spec:
+  replicas: 3 # number of pods to run
+  selector:
+    matchLabels:
+      app: k8s-web-hello # which pods are managed by this deployment
+  template:
+    metadata:
+      labels:
+        app: k8s-web-hello # labels for pods managed by this deployment
+    spec:
+      containers:
+        - name: k8s-web-hello
+          image: diegofg93/k8s-web-hello:latest
+          resources:
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
+          ports:
+            - containerPort: 3000
+# more info here: https://kubernetes.io/docs/reference/kubernetes-api/

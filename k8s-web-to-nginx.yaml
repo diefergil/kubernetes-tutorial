@@ -1,0 +1,38 @@
+# The two files combined in one
+apiVersion: v1
+kind: Service
+metadata:
+  name: k8s-web-to-nginx
+spec:
+  type: LoadBalancer
+  selector:
+    app: k8s-web-to-nginx
+  ports:
+    - port: 3333 # port where the service is listening
+      targetPort: 3000 # port where the container is listening
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: k8s-web-to-nginx
+spec:
+  replicas: 3 # number of pods to run
+  selector:
+    matchLabels:
+      app: k8s-web-to-nginx # which pods are managed by this deployment
+  template:
+    metadata:
+      labels:
+        app: k8s-web-to-nginx # labels for pods managed by this deployment
+    spec:
+      containers:
+        - name: k8s-web-to-nginx
+          image: diegofg93/k8s-web-to-nginx
+          resources:
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
+          ports:
+            - containerPort: 3000
+# more info here: https://kubernetes.io/docs/reference/kubernetes-api/
